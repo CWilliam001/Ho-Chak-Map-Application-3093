@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="William Choong, Chew Wei Chung">
+        <link rel="shortcut icon" href="image/hochak_logo.png">
+        <link rel="stylesheet" href="css/app.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <title>Ho Chak Map Application</title>
+    </head>
+    <body class="d-flex flex-column h-100">
+        <header>
+            <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="*">
+                        <img src="image/hochak_logo.png" alt="" class="img-fluid w-25 h-25">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#/home">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#/insert">Insert</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+
+        <!-- Vue.js App ---------------------------------------------------------->
+        <main id="app" class="flex-shrink-0" v-cloak>
+            <div class="container">
+                <transition name="slide" mode="out-in">
+                    <router-view></router-view>
+                </transition>
+            </div>
+        </main>
+
+        <footer class="footer mt-5 py-3 bg-light">
+            <div class="container">
+                <span class="text-muted">
+                        Copyrighted &copy; 2022 &middot;
+                        Developed by <b>William Choong & Chew Wei Chung</b>
+                    </span>
+            </div>
+        </footer>
+
+        <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+        <script src="js/vue.js"></script>
+        <script src="js/vue-router.js"></script>
+        <script src="js/vuefire.js"></script>
+        <script src="js/jquery.slim.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Firebase -----------------------------------------------------------
+            firebase.initializeApp({
+                projectId: 'william-mapapp3093'
+            });
+
+            const ref = firebase.firestore().collection('restaurants');
+
+            Vue.use(Vuefire.firestorePlugin);
+
+            // Router -------------------------------------------------------------
+            const router = new VueRouter({
+                routes: [
+                    { path: '/home', component: load('home') },
+                    { path: '/insert', component: load('insert') },
+                    { path: '/update/:id', component: load('update') },
+                    { path: '/details/:id', component: load('details') },
+                    { path: '*', redirect: '/home' }
+                ]
+            });
+
+            // Root component -----------------------------------------------------
+            const app = new Vue({
+                router,
+                el: '#app',
+                data: {
+                    restaurants: []
+                },
+                firestore: {
+                    restaurants: ref
+                },
+                created() {
+
+                }
+            });
+        </script>
+    </body>
+</html>

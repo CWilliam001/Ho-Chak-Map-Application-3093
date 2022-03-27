@@ -1,0 +1,136 @@
+<template id="update">
+    <div>
+        <h1>Update Restaurant</h1>
+
+        <form class="form" @submit.prevent="submit">
+            <div class="mt-3">
+                <label for="userName" class="form-label">Recommender Name</label>
+                <input v-model.trim="userName" required maxlength="60" type="text" class="form-control" id="userName" v-focus ref="userName">
+            </div>
+            <div class="mt-3">
+                <label for="restaurantName" class="form-label">Restaurant Name</label>
+                <input v-model.trim="restaurantName" required maxlength="60" type="text" class="form-control" id="restaurantName">
+            </div>
+            <div class="mt-3">
+                <label for="location" class="form-label">Location</label>
+                <input v-model.trim="location" required maxlength="150" type="text" class="form-control" id="location">
+            </div>
+            <div class="mt-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input v-model.trim="phone" required maxlength="150" type="text" class="form-control" id="phone" title="Format: 01X-XXXXXXXX" pattern="01\d-\d{7,8}" @input="validatePhone">
+            </div>
+            <div class="mt-3">
+                <div class="row">
+                    <div class="col">
+                        <label for="photo" class="form-label">Image</label>
+                        <input class="form-control" id="photo" @change="change" type="file" accept="image/*" ref="file" style="background-color: #fff;">
+                    </div>
+                    <div class="col">
+                        <label></label>
+                        <img :src="photo || temp" class="photo">
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <label for="desc" class="form-label">Description</label>
+                <textarea v-model.trim="desc" class="form-control" id="desc" rows="5" required></textarea>
+            </div>
+            <div class="mt-4">
+                <button class="btn btn-info text-light me-2">Save Changes</button>
+                <button @click.prevent="reset" class="btn btn-warning text-light me-2">Reset</button>
+                <button @click.prevent="$router.push('/home')" class="btn btn-danger text-light">Cancel</button>
+            </div>
+        </form>
+    </div>
+</template>
+
+<script>
+    Vue.component('update', {
+        template: '#update',
+        data: () => ({
+            restaurantName   : '',
+            location : '',
+            phone: '',
+            photo : '',
+            desc: '',
+            temp : 'image/photo.png'
+        }),
+        watch: {
+            $route: {
+                handler: 'load',
+                immediate: true
+            }
+        },
+        methods: {
+            load() {
+                let id = this.$route.params.id;
+                let r = this.$root.restaurants.find(r => r.id == id);
+
+                if (!r) {
+                    this.$router.push('/home');
+                    return
+                }
+
+                this.id = r.id;
+                this.userName = r.userName;
+                this.restaurantName = r.restaurantName;
+                this.location = r.location;
+                this.phone = r.phone;
+                this.photo = r.photo;
+                this.desc = r.desc;
+            },
+            change(e) {
+                let f = e.target.files[0];
+                crop(f, 280, 200, 'dataURL', 'image/webp').then(dataURL => this.photo = dataURL).catch(err => this.photo = '');
+            },
+            validateRestaurantName(e) {
+                let el = e.target;
+                let restaurantName = el.value;
+
+                el.setCustomValidity('');
+                if (el.validity.valid) {
+                    let r = this.$root.restaurants.find(r => r.restaurantName == restaurantName);
+                    if (r) {
+                        el.setCustomValidity('Duplicate Restaurant Name');
+                    }
+                }
+            },
+            validatePhone(e) {
+                let el = e.target;
+                let phone = el.value;
+
+                el.setCustomValidity('');
+                if (el.validity.valid) {
+                    let r = this.$root.restaurants.find(r => r.phone == phone);
+                    if (r) {
+                        el.setCustomValidity('Duplicate Phone');
+                    }
+                }
+            },
+            reset() {
+                this.load();
+                this.$refs.file.value = '';
+                this.$refs.restaurantName.focus();
+            },
+            submit() {
+                let data = {
+                    userName: this.userName,
+                    restaurantName: this.restaurantName,
+                    location: this.location,
+                    phone: this.phone,
+                    desc: this.desc
+                };
+
+                if (this.photo) {
+                    data.photo = this.photo;
+                }
+
+                ref.doc(this.id).update(data);
+                this.$router.push('/home');
+            }
+        },
+        created() {
+            document.title = 'Ho Chak : Update';
+        }
+    });
+</script>

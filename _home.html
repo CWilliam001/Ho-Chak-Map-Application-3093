@@ -1,0 +1,71 @@
+<template id="home">
+    <div>
+        <h1 class="my-5">Ho Chak Recommended Restaurant</h1>
+
+        <div class="card" style="width: 18rem;" v-for="r of $root.restaurants">
+            <img :src="r.photo" class="card-img-top photo" :alt="r.restaurantName">
+            <div class="card-body">
+                <h5 class="card-title">{{ r.restaurantName }}</h5>
+                <p class="card-text">
+                    by {{ r.userName }}
+                </p>
+                <button @click.prevent="$router.push('/details/' + r.id)" class="btn btn-info text-light">View</button>
+            </div>
+        </div>
+
+        <p class="mt-4">{{ $root.restaurants.length }} restaurant(s) fetch from databases</p>
+        <p class="mt-2">
+            <button @click="restore" class="btn btn-success text-light">Restore</button>
+            <button type="button" class="btn btn-danger text-light" data-bs-toggle="modal" data-bs-target="#removeAllModal">Remove All</button>
+        </p>
+        
+        <!-- Modal -->
+        <div class="modal modal-dialog modal-dialog-centered fade" id="removeAllModal" tabindex="-1" aria-labelledby="removeAllLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="removeAllLabel">Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure to remove all these data?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button @click="removeAll" class="btn btn-danger text-light" data-bs-dismiss="modal">Remove All</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    Vue.component('home', {
+        template: '#home',
+        data: () => ({
+            checked: []
+        }),
+        computed: {
+            count() {
+                return this.$root.restaurants.length;
+            }
+        },
+        methods: {
+            restore() {
+                this.$root.restaurants.forEach(r => ref.doc(r.id).delete());
+
+                fetch('data.json').then(resp => resp.json()).then(json => json.forEach(data => ref.doc().set(data)));
+            },
+            remove(id) {
+                ref.doc(id).delete();
+            },
+            removeAll() {
+                    this.$root.restaurants.forEach(r => ref.doc(r.id).delete());
+            }
+        },
+        created() {
+            document.title = 'Ho Chak';
+        }
+    });
+</script>
