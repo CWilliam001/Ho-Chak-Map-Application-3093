@@ -2,16 +2,21 @@
     <div>
         <h1 class="my-5">Ho Chak Recommended Restaurant</h1>
 
-        <div class="card" style="width: 18rem;" v-for="r of $root.restaurants">
-            <img :src="r.photo" class="card-img-top photo" :alt="r.restaurantName">
-            <div class="card-body">
-                <h5 class="card-title">{{ r.restaurantName }}</h5>
-                <p class="card-text">
-                    by {{ r.userName }}
-                </p>
-                <button @click.prevent="$router.push('/details/' + r.id)" class="btn btn-info text-light">View</button>
+        <div class="row">
+            <div class="col-lg-3" v-for="r of $root.restaurants">
+                <div class="card" style="width: 18rem;">
+                    <img :src="r.photo" class="card-img-top photo" :alt="r.restaurantName">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ r.restaurantName }}</h5>
+                        <p class="card-text">
+                            by {{ r.userName }}
+                        </p>
+                        <button @click.prevent="$router.push('/details/' + r.id)" class="btn btn-info text-light">View</button>
+                    </div>
+                </div>
             </div>
         </div>
+        
 
         <p class="mt-4">{{ $root.restaurants.length }} restaurant(s) fetch from databases</p>
         <p class="mt-2">
