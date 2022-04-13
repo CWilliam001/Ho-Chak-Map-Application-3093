@@ -3,7 +3,7 @@
         <h1 class="my-5">Ho Chak Recommended Restaurant</h1>
 
         <div class="row">
-            <div class="col-lg-3" v-for="r of $root.restaurants">
+            <div class="col-lg-3 m-1" v-for="r of $root.restaurants">
                 <div class="card" style="width: 18rem;">
                     <img :src="r.photo" class="card-img-top photo" :alt="r.restaurantName">
                     <div class="card-body">
@@ -16,13 +16,6 @@
                 </div>
             </div>
         </div>
-        
-
-        <p class="mt-4">{{ $root.restaurants.length }} restaurant(s) fetch from databases</p>
-        <p class="mt-2">
-            <button @click="restore" class="btn btn-success text-light">Restore</button>
-            <button type="button" class="btn btn-danger text-light" data-bs-toggle="modal" data-bs-target="#removeAllModal">Remove All</button>
-        </p>
         
         <!-- Modal -->
         <div class="modal modal-dialog modal-dialog-centered fade" id="removeAllModal" tabindex="-1" aria-labelledby="removeAllLabel" aria-hidden="true">
@@ -42,6 +35,15 @@
                 </div>
             </div>
         </div>
+
+        
+        <p class="mt-4">{{ $root.restaurants.length }} restaurant(s) fetch from databases</p>
+        <p class="mt-2">
+            <button @click="restore" class="btn btn-success text-light">Restore</button>
+            <button type="button" class="btn btn-danger text-light" data-bs-toggle="modal" data-bs-target="#removeAllModal">Remove All</button>
+        </p>
+        
+        
     </div>
 </template>
 

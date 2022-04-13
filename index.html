@@ -54,6 +54,7 @@
 
         <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3-W0Pqab-jJ3JOffFwlFKRtDrZV2pGzw"></script>
         <script src="js/vue.js"></script>
         <script src="js/vue-router.js"></script>
         <script src="js/vuefire.js"></script>
@@ -63,7 +64,8 @@
         <script>
             // Firebase -----------------------------------------------------------
             firebase.initializeApp({
-                projectId: 'william-mapapp3093'
+                projectId: 'william-mapapp3093',
+                storageBucket: 'gs://william-mapapp3093.appspot.com/'
             });
 
             const ref = firebase.firestore().collection('restaurants');
